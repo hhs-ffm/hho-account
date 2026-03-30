@@ -5,16 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Helmholtz-Online Login</title>
   <script>
-    // Grab the email parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const email = urlParams.get('e');
     
-    // If an email is found, redirect to the bulletproof AddSession flow
     if (email) {
-      const loginUrl = "https://accounts.google.com/AddSession?login_hint=" + encodeURIComponent(email) + "&Email=" + encodeURIComponent(email) + "&continue=https://mail.google.com/";
+      // The Workspace Trick: Force the destination to the school's specific Google Workspace environment
+      const workspaceUrl = "https://mail.google.com/a/helmholtzschule-ffm.net/";
+      
+      // Pass the workspace destination into the continue parameter, along with the email hints
+      const loginUrl = "https://accounts.google.com/ServiceLogin?continue=" + encodeURIComponent(workspaceUrl) + "&login_hint=" + encodeURIComponent(email) + "&Email=" + encodeURIComponent(email);
+      
       window.location.replace(loginUrl);
     } else {
-      // Fallback if someone visits the page without a QR code
       window.location.replace("http://mail.helmholtzschule-ffm.net");
     }
   </script>
