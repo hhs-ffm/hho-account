@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Helmholtz-Online Login</title>
+  <script>
+    // Grab the email parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('e');
+    
+    // If an email is found, redirect to the bulletproof AddSession flow
+    if (email) {
+      const loginUrl = "https://accounts.google.com/AddSession?login_hint=" + encodeURIComponent(email) + "&Email=" + encodeURIComponent(email) + "&continue=https://mail.google.com/";
+      window.location.replace(loginUrl);
+    } else {
+      // Fallback if someone visits the page without a QR code
+      window.location.replace("http://mail.helmholtzschule-ffm.net");
+    }
+  </script>
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
+  <p>Sie werden zum Login weitergeleitet...</p>
+</body>
+</html>
