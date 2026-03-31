@@ -24,6 +24,7 @@
       font-size: 1rem;
       margin: 1rem 0;
       word-break: break-all;
+      font-weight: bold;
     }
     button {
       display: block;
@@ -64,7 +65,7 @@
     E-Mail kopieren
   </button>
 
-  <p style="font-size:0.9rem; color:#666;">
+  <p id="hint" style="font-size:0.9rem; color:#666;">
     Falls mehrere Konten angezeigt werden: E-Mail einfügen.
   </p>
 </div>
@@ -77,21 +78,25 @@
 <script>
   const params = new URLSearchParams(window.location.search);
   const email = params.get('e');
-
   const emailDiv = document.getElementById("email");
+
+  let redirectTimer;
 
   if (email) {
     emailDiv.textContent = email;
 
-    setTimeout(() => {
+    // OPTIONAL: delayed auto-redirect (user has time to react)
+    redirectTimer = setTimeout(() => {
       goLogin();
-    }, 600);
+    }, 4000); // 4 seconds
 
   } else {
     window.location.replace("https://mail.helmholtzschule-ffm.net");
   }
 
   function goLogin() {
+    clearTimeout(redirectTimer); // prevent double trigger
+
     const url =
       "https://accounts.google.com/AccountChooser"
       + "?Email=" + encodeURIComponent(email)
@@ -101,8 +106,10 @@
   }
 
   function copyEmail() {
+    clearTimeout(redirectTimer); // user is interacting → cancel redirect
+
     navigator.clipboard.writeText(email).then(() => {
-      alert("E-Mail kopiert");
+      document.getElementById("hint").textContent = "E-Mail kopiert – jetzt bei Google einfügen.";
     });
   }
 </script>
