@@ -4,24 +4,108 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Helmholtz-Online Login</title>
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const email = urlParams.get('e');
-    
-    if (email) {
-      // The Workspace Trick: Force the destination to the school's specific Google Workspace environment
-      const workspaceUrl = "https://mail.google.com/a/helmholtzschule-ffm.net/";
-      
-      // Pass the workspace destination into the continue parameter, along with the email hints
-      const loginUrl = "https://accounts.google.com/ServiceLogin?continue=" + encodeURIComponent(workspaceUrl) + "&login_hint=" + encodeURIComponent(email) + "&Email=" + encodeURIComponent(email);
-      
-      window.location.replace(loginUrl);
-    } else {
-      window.location.replace("http://mail.helmholtzschule-ffm.net");
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f5f7fb;
+      padding: 2rem;
     }
-  </script>
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      max-width: 420px;
+      margin: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .email {
+      font-size: 1rem;
+      margin: 1rem 0;
+      word-break: break-all;
+    }
+    button {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .primary {
+      background: #1a73e8;
+      color: white;
+    }
+    .secondary {
+      background: #e8f0fe;
+    }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
-  <p>Sie werden zum Login weitergeleitet...</p>
+
+<body>
+
+<div class="card">
+  <h2>Google-Konto Anmeldung</h2>
+
+  <div id="email" class="email"></div>
+
+  <button class="primary" onclick="goLogin()">
+    Bei Google anmelden
+  </button>
+
+  <button class="secondary" onclick="copyEmail()">
+    E-Mail kopieren
+  </button>
+
+  <p style="font-size:0.9rem; color:#666;">
+    Falls mehrere Konten angezeigt werden: E-Mail einfügen.
+  </p>
+</div>
+
+<footer>
+  <a href="/impressum.html">Impressum</a> |
+  <a href="/datenschutz.html">Datenschutz</a>
+</footer>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const email = params.get('e');
+
+  const emailDiv = document.getElementById("email");
+
+  if (email) {
+    emailDiv.textContent = email;
+
+    setTimeout(() => {
+      goLogin();
+    }, 600);
+
+  } else {
+    window.location.replace("https://mail.helmholtzschule-ffm.net");
+  }
+
+  function goLogin() {
+    const url =
+      "https://accounts.google.com/AccountChooser"
+      + "?Email=" + encodeURIComponent(email)
+      + "&continue=" + encodeURIComponent("https://mail.google.com/");
+
+    window.location.href = url;
+  }
+
+  function copyEmail() {
+    navigator.clipboard.writeText(email).then(() => {
+      alert("E-Mail kopiert");
+    });
+  }
+</script>
+
 </body>
 </html>
