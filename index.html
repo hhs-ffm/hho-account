@@ -6,46 +6,82 @@
   <title>Helmholtz-Online Login</title>
 
   <style>
+    /* Angepasst an das Drupal Bartik Theme der Helmholtzschule */
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       text-align: center;
-      background: #f5f7fb;
-      padding: 2rem;
+      background-color: #f6f6f2; /* Weicher Schulhomepage-Hintergrund */
+      color: #3b3b3b;
+      padding: 2rem 1rem;
+      margin: 0;
     }
     .card {
       background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
+      padding: 2rem;
+      border-radius: 8px;
       max-width: 420px;
       margin: auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-top: 5px solid #0071b3; /* Helmholtz-Blau Akzent */
+    }
+    .banner {
+      width: 100%;
+      height: auto;
+      margin-bottom: 1.5rem;
+      border-radius: 4px;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 0;
+      color: #000;
     }
     .email {
-      font-size: 1rem;
-      margin: 1rem 0;
+      font-size: 1.1rem;
+      margin: 1.5rem 0;
       word-break: break-all;
       font-weight: bold;
+      color: #0071b3;
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #e1e4e8;
     }
     button {
       display: block;
       width: 100%;
-      margin: 0.5rem 0;
-      padding: 0.8rem;
+      margin: 0.6rem 0;
+      padding: 0.9rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 1rem;
+      font-weight: bold;
       cursor: pointer;
+      transition: background-color 0.2s;
     }
     .primary {
-      background: #1a73e8;
+      background: #0071b3; /* Helmholtz-Blau */
       color: white;
     }
+    .primary:hover {
+      background: #005a8f;
+    }
     .secondary {
-      background: #e8f0fe;
+      background: #e6f0f9;
+      color: #0071b3;
+    }
+    .secondary:hover {
+      background: #d4e5f4;
     }
     footer {
-      margin-top: 2rem;
-      font-size: 0.8rem;
+      margin-top: 2.5rem;
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: #0071b3;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -53,26 +89,28 @@
 <body>
 
 <div class="card">
-  <h2>Google-Konto Anmeldung</h2>
+  <img src="https://hhs-ffm.github.io/hho-account/HHO-Banner.png" alt="Helmholtz-Online" class="banner">
 
-  <div id="email" class="email"></div>
+  <h2>Account-Aktivierung</h2>
+
+  <div id="email" class="email">Lade E-Mail...</div>
 
   <button class="primary" onclick="goLogin()">
-    Bei Google anmelden
+    über Google anmelden
   </button>
 
   <button class="secondary" onclick="copyEmail()">
     E-Mail kopieren
   </button>
 
-  <p id="hint" style="font-size:0.9rem; color:#666;">
-    Falls mehrere Konten angezeigt werden: E-Mail einfügen.
+  <p id="hint" style="font-size:0.85rem; color:#666; margin-top:1rem; line-height:1.4;">
+    Falls bei Google mehrere Konten angezeigt werden: Bitte die kopierte E-Mail-Adresse einfügen.
   </p>
 </div>
 
 <footer>
-  <a href="/impressum.html">Impressum</a> |
-  <a href="/datenschutz.html">Datenschutz</a>
+  <a href="https://helmholtzschule-frankfurt.de/impressum">Impressum</a> |
+  <a href="https://helmholtzschule-frankfurt.de/datenschutz">Datenschutz</a>
 </footer>
 
 <script>
@@ -85,17 +123,18 @@
   if (email) {
     emailDiv.textContent = email;
 
-    // OPTIONAL: delayed auto-redirect (user has time to react)
+    // Optionaler Auto-Redirect nach 10 Sekunden
     redirectTimer = setTimeout(() => {
       goLogin();
-    }, 10000); // 10 seconds
+    }, 10000);
 
   } else {
-    window.location.replace("https://mail.helmholtzschule-ffm.net");
+    // Falls keine E-Mail in der URL steht, direkt zum Standard-Login der Schule
+    //window.location.replace("https://mail.helmholtzschule-ffm.net");
   }
 
   function goLogin() {
-    clearTimeout(redirectTimer); // prevent double trigger
+    clearTimeout(redirectTimer); // Doppeltes Auslösen verhindern
 
     const url =
       "https://accounts.google.com/AccountChooser"
@@ -106,10 +145,15 @@
   }
 
   function copyEmail() {
-    clearTimeout(redirectTimer); // user is interacting → cancel redirect
+    clearTimeout(redirectTimer); // User interagiert → Redirect abbrechen
 
     navigator.clipboard.writeText(email).then(() => {
-      document.getElementById("hint").textContent = "E-Mail kopiert – jetzt bei Google einfügen.";
+      const hintObj = document.getElementById("hint");
+      hintObj.textContent = "✓ E-Mail kopiert – bitte gleich bei Google einfügen.";
+      hintObj.style.color = "#0071b3";
+      hintObj.style.fontWeight = "bold";
+    }).catch(err => {
+      console.error('Fehler beim Kopieren: ', err);
     });
   }
 </script>
