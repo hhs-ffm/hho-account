@@ -139,10 +139,10 @@
   if (email) {
     emailDiv.textContent = email;
 
-    // Optionaler Auto-Redirect nach 10 Sekunden
+    // Optionaler Auto-Redirect nach 20 Sekunden
     redirectTimer = setTimeout(() => {
       goLogin();
-    }, 10000);
+    }, 20000);
 
   } else {
     // Falls keine E-Mail in der URL steht, direkt zum Standard-Login der Schule
